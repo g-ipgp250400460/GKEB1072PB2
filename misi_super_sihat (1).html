@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🌈 Misi Super Sihat</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --pink:#FF6B9D;--blue:#4FC3F7;--yellow:#FFD93D;--green:#6BCB77;
+  --purple:#C084FC;--orange:#FF9F43;--red:#FF6B6B;--teal:#26C6DA;
+  --dark:#1a1a2e;--card:#16213e;--light:#f0f4ff;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+  min-height:100vh;color:white;overflow-x:hidden;
+}
+.scene{display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:20px;animation:fadeIn .5s ease;}
+.scene.active{display:flex;}
+@keyframes fadeIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes bounce{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-20px) scale(1.05)}}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{0%{transform:scale(0) rotate(-10deg);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+@keyframes starFloat{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(-80px) rotate(360deg);opacity:0}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.6)}50%{box-shadow:0 0 0 12px rgba(255,215,0,0)}}
+@keyframes rainbowShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.title-rainbow{
+  font-family:'Fredoka One',cursive;font-size:clamp(2rem,5vw,3.8rem);
+  background:linear-gradient(90deg,#FF6B9D,#FFD93D,#6BCB77,#4FC3F7,#C084FC);
+  background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  animation:rainbowShift 3s ease infinite;text-align:center;line-height:1.1;
+}
+.cloud{position:fixed;background:rgba(255,255,255,.06);border-radius:50px;pointer-events:none;}
+.cloud:nth-child(1){width:120px;height:40px;top:8%;left:5%;animation:float 6s ease infinite;}
+.cloud:nth-child(2){width:180px;height:50px;top:15%;right:8%;animation:float 8s ease infinite 1s;}
+.cloud:nth-child(3){width:100px;height:35px;bottom:20%;left:10%;animation:float 7s ease infinite 2s;}
+
+.big-btn{
+  font-family:'Fredoka One',cursive;font-size:1.4rem;padding:16px 42px;
+  border:none;border-radius:50px;cursor:pointer;transition:all .2s;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);letter-spacing:.5px;
+}
+.big-btn:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 14px 28px rgba(0,0,0,.4);}
+.big-btn:active{transform:scale(.96);}
+.btn-pink{background:linear-gradient(135deg,#FF6B9D,#f72585);color:white;}
+.btn-blue{background:linear-gradient(135deg,#4FC3F7,#0096c7);color:white;}
+.btn-green{background:linear-gradient(135deg,#6BCB77,#2d9e3e);color:white;}
+.btn-yellow{background:linear-gradient(135deg,#FFD93D,#f9a825);color:#333;}
+.btn-purple{background:linear-gradient(135deg,#C084FC,#7c3aed);color:white;}
+.btn-orange{background:linear-gradient(135deg,#FF9F43,#e67e22);color:white;}
+.btn-gray{background:rgba(255,255,255,.15);color:white;border:2px solid rgba(255,255,255,.3);}
+
+.card-glow{
+  background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);
+  border-radius:24px;padding:24px;backdrop-filter:blur(8px);
+  transition:all .3s;
+}
+.card-glow:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);transform:translateY(-4px);}
+
+.star-burst{position:fixed;pointer-events:none;z-index:999;font-size:1.5rem;}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,30,.95);backdrop-filter:blur(12px);border-top:1px solid rgba(255,255,255,.1);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100;}
+.nav-bar button{background:none;border:none;color:white;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.85rem;font-weight:700;padding:8px 14px;border-radius:12px;transition:all .2s;}
+.nav-bar button:hover{background:rgba(255,255,255,.15);}
+.progress-pill{background:rgba(255,255,255,.1);border-radius:20px;padding:6px 16px;font-size:.82rem;font-weight:700;color:#FFD93D;}
+.page-title{font-family:'Fredoka One',cursive;font-size:clamp(1.5rem,4vw,2.5rem);text-align:center;margin-bottom:8px;}
+.subtitle{font-size:1rem;color:rgba(255,255,255,.7);text-align:center;margin-bottom:24px;}
+
+/* HERO scene */
+.hero-emojis{font-size:4.5rem;animation:bounce 2s ease infinite;margin-bottom:16px;display:block;}
+.star-row{display:flex;gap:6px;justify-content:center;margin-top:20px;}
+.star{font-size:1.8rem;animation:float 2s ease infinite;}
+.star:nth-child(2){animation-delay:.3s}
+.star:nth-child(3){animation-delay:.6s}
+.star:nth-child(4){animation-delay:.9s}
+.star:nth-child(5){animation-delay:1.2s}
+
+/* AVATAR scene */
+.avatar-grid{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin:20px 0;}
+.avatar-card{
+  width:150px;text-align:center;padding:20px 16px;border-radius:24px;cursor:pointer;
+  background:rgba(255,255,255,.08);border:3px solid rgba(255,255,255,.15);
+  transition:all .25s;
+}
+.avatar-card:hover{transform:scale(1.08);border-color:var(--yellow);}
+.avatar-card.selected{border-color:var(--yellow);background:rgba(255,211,61,.15);animation:pulse 1.5s infinite;}
+.av-emoji{font-size:4.5rem;display:block;margin-bottom:10px;}
+.av-name{font-family:'Fredoka One',cursive;font-size:1.3rem;}
+.av-trait{font-size:.82rem;color:rgba(255,255,255,.65);margin-top:4px;}
+
+/* ESCAPE ROOM */
+.room-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:560px;width:100%;margin:16px 0;}
+.room-item{
+  padding:24px;border-radius:20px;text-align:center;cursor:pointer;
+  font-size:3.5rem;transition:all .25s;position:relative;
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);
+}
+.room-item:hover{transform:scale(1.08) rotate(2deg);}
+.room-item.found{opacity:.5;pointer-events:none;}
+.room-item .badge{
+  position:absolute;top:-8px;right:-8px;background:var(--green);
+  color:white;border-radius:50%;width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:900;
+}
+.clue-popup{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.clue-box{
+  background:linear-gradient(135deg,#16213e,#0f3460);border:3px solid var(--yellow);
+  border-radius:24px;padding:30px;max-width:380px;width:100%;text-align:center;
+  animation:pop .3s ease;
+}
+.clue-num{font-family:'Fredoka One',cursive;font-size:1rem;color:var(--yellow);margin-bottom:8px;}
+.clue-text{font-size:1.05rem;line-height:1.6;margin:12px 0;}
+.source-tag{font-size:.78rem;color:rgba(255,255,255,.5);font-style:italic;}
+
+/* DRAG DROP */
+.drag-arena{display:flex;gap:20px;width:100%;max-width:680px;margin:16px 0;align-items:flex-start;flex-wrap:wrap;}
+.drag-pool{flex:1;min-width:180px;}
+.drag-pool h3{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:12px;text-align:center;opacity:.8;}
+.drag-item{
+  padding:12px 16px;border-radius:14px;margin:8px 0;cursor:grab;
+  background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);
+  font-size:.95rem;font-weight:700;text-align:center;transition:all .2s;
+  user-select:none;
+}
+.drag-item:hover{transform:scale(1.05);background:rgba(255,255,255,.18);}
+.drag-item.dragging{opacity:.4;cursor:grabbing;}
+.drop-zone{
+  flex:1;min-width:180px;min-height:80px;border-radius:16px;padding:12px;
+  border:2.5px dashed rgba(255,255,255,.25);transition:all .2s;
+}
+.drop-zone.over{border-color:var(--yellow);background:rgba(255,211,61,.1);}
+.drop-zone h3{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:10px;text-align:center;}
+.drop-zone.correct-zone{border-color:var(--green);}
+.drop-zone.wrong-zone{border-color:var(--red);}
+.score-bar{display:flex;gap:8px;justify-content:center;margin:12px 0;}
+.score-pip{width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.3);}
+.score-pip.correct{background:var(--green);border-color:var(--green);}
+.score-pip.wrong{background:var(--red);border-color:var(--red);}
+
+/* MONSTER */
+.monster-scene{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;align-items:flex-start;width:100%;max-width:680px;}
+.monster-box{text-align:center;flex:1;min-width:180px;}
+.monster-emoji{font-size:8rem;cursor:pointer;transition:transform .2s;display:inline-block;}
+.monster-emoji:hover{transform:scale(1.08);}
+.monster-hp{display:flex;gap:4px;justify-content:center;margin:10px 0;}
+.hp-heart{font-size:1.5rem;transition:all .3s;}
+.hp-heart.lost{filter:grayscale(1);opacity:.3;}
+.effect-panel{flex:2;min-width:200px;}
+.effect-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.effect-tab{
+  padding:8px 16px;border-radius:20px;cursor:pointer;font-family:'Fredoka One',cursive;font-size:.9rem;
+  background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);transition:all .2s;
+}
+.effect-tab.active{background:var(--orange);border-color:var(--orange);color:white;}
+.effect-cards{display:flex;flex-direction:column;gap:10px;}
+.effect-card{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:14px;
+  background:rgba(255,255,255,.07);border-left:4px solid;animation:pop .3s ease;
+}
+.ec-icon{font-size:2rem;flex-shrink:0;}
+.ec-title{font-weight:800;font-size:.95rem;margin-bottom:3px;}
+.ec-desc{font-size:.8rem;color:rgba(255,255,255,.7);}
+
+/* BUBBLE MAP */
+.bubble-area{position:relative;width:340px;height:340px;margin:0 auto;}
+.center-bubble{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--orange));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-family:'Fredoka One',cursive;font-size:.85rem;text-align:center;
+  box-shadow:0 0 30px rgba(255,107,107,.5);
+}
+.orbit-bubble{
+  position:absolute;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:2rem;
+  transition:all .25s;box-shadow:0 4px 15px rgba(0,0,0,.3);
+}
+.orbit-bubble:hover{transform:scale(1.2) !important;z-index:10;}
+.orbit-bubble.active-bub{animation:pulse 1s ease;}
+.bubble-info{
+  max-width:420px;min-height:80px;margin:16px auto;padding:18px 22px;
+  background:rgba(255,255,255,.08);border-radius:16px;text-align:center;
+  border:2px solid rgba(255,255,255,.15);font-size:.95rem;line-height:1.6;
+}
+
+/* SIX HATS */
+.hats-grid{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:640px;margin:16px 0;}
+.hat-card{
+  width:180px;border-radius:20px;padding:20px 16px;cursor:pointer;text-align:center;
+  background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.12);transition:all .25s;
+}
+.hat-card:hover{transform:translateY(-6px);border-color:rgba(255,255,255,.4);}
+.hat-card.active-hat{border-color:var(--yellow);background:rgba(255,211,61,.12);transform:scale(1.05);}
+.hat-icon{font-size:3rem;margin-bottom:10px;display:block;}
+.hat-label{font-family:'Fredoka One',cursive;font-size:1rem;margin-bottom:6px;}
+.hat-content{display:none;background:rgba(255,255,255,.07);border-radius:16px;padding:18px;max-width:500px;margin:0 auto;font-size:.95rem;line-height:1.6;text-align:center;animation:pop .3s ease;}
+.hat-content.show{display:block;}
+.thinking-trophy{display:none;text-align:center;font-size:3rem;animation:bounce 1s ease infinite;}
+
+/* PJ HERO GAME */
+.pj-arena{text-align:center;max-width:480px;}
+.hero-runner{font-size:6rem;cursor:pointer;display:inline-block;transition:transform .1s;}
+.hero-runner.jump{animation:bounce .4s ease;}
+.energy-bar{background:rgba(255,255,255,.1);border-radius:20px;height:20px;margin:12px 0;border:2px solid rgba(255,255,255,.2);overflow:hidden;}
+.energy-fill{height:100%;border-radius:18px;background:linear-gradient(90deg,var(--green),#00e676);transition:width .3s;}
+.activity-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:16px 0;}
+.activity-btn{
+  padding:12px 20px;border-radius:14px;font-family:'Fredoka One',cursive;font-size:1rem;
+  cursor:pointer;border:none;transition:all .2s;
+}
+
+/* CORNELL NOTEBOOK */
+.notebook{max-width:640px;width:100%;background:rgba(255,255,255,.05);border-radius:24px;overflow:hidden;border:2px solid rgba(255,255,255,.1);}
+.notebook-header{background:linear-gradient(135deg,var(--orange),var(--pink));padding:16px 24px;display:flex;align-items:center;gap:12px;}
+.notebook-header h3{font-family:'Fredoka One',cursive;font-size:1.3rem;}
+.notebook-body{padding:20px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.notebook-col h4{font-family:'Fredoka One',cursive;font-size:.95rem;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.nb-field{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px;color:white;font-family:'Nunito',sans-serif;font-size:.85rem;resize:none;min-height:70px;margin-bottom:8px;}
+.nb-field:focus{outline:none;border-color:var(--yellow);}
+.nb-field::placeholder{color:rgba(255,255,255,.3);}
+.nb-check-btn{padding:12px 28px;border-radius:20px;background:linear-gradient(135deg,var(--green),var(--teal));color:white;font-family:'Fredoka One',cursive;font-size:1rem;border:none;cursor:pointer;transition:all .2s;display:block;margin:12px auto 0;}
+.nb-check-btn:hover{transform:scale(1.04);}
+.nb-result{display:none;text-align:center;margin-top:12px;padding:14px;border-radius:14px;font-size:1rem;font-weight:700;}
+
+/* WHEEL */
+.wheel-wrap{position:relative;display:inline-block;margin:0 auto;}
+canvas#wheel{display:block;border-radius:50%;box-shadow:0 0 40px rgba(255,211,61,.3);}
+.wheel-pointer{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:2rem;z-index:10;}
+.wheel-prize{
+  display:none;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.06));
+  border:2.5px solid var(--yellow);border-radius:20px;padding:20px 28px;
+  text-align:center;margin-top:16px;max-width:340px;animation:pop .4s ease;
+}
+.wheel-prize .prize-icon{font-size:3rem;display:block;margin-bottom:8px;}
+.wheel-prize .prize-text{font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--yellow);}
+.wheel-prize .prize-desc{font-size:.88rem;margin-top:6px;opacity:.85;}
+
+/* BOSS BATTLE */
+.boss-area{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;align-items:flex-start;width:100%;max-width:680px;}
+.boss-side{text-align:center;flex:1;min-width:140px;}
+.boss-emoji{font-size:7rem;display:inline-block;transition:all .3s;}
+.boss-emoji.hit{animation:shake .3s ease;}
+.boss-hp-bar{background:rgba(255,255,255,.1);border-radius:20px;height:22px;margin:10px 0;border:2px solid rgba(255,255,255,.2);overflow:hidden;}
+.boss-hp-fill{height:100%;border-radius:18px;background:linear-gradient(90deg,var(--red),#ff4757);transition:width .5s;}
+.boss-lives{display:flex;gap:4px;justify-content:center;margin-top:8px;}
+.boss-heart{font-size:1.4rem;}
+.boss-q-area{flex:2;min-width:200px;}
+.boss-q{font-family:'Fredoka One',cursive;font-size:1.05rem;margin-bottom:14px;padding:14px;background:rgba(255,255,255,.08);border-radius:14px;text-align:center;line-height:1.5;}
+.boss-opts{display:flex;flex-direction:column;gap:8px;}
+.boss-opt{
+  padding:12px 16px;border-radius:12px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:.9rem;font-weight:700;
+  background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.12);text-align:left;color:white;transition:all .2s;
+}
+.boss-opt:hover:not(:disabled){background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);}
+.boss-opt.correct{background:rgba(107,203,119,.25);border-color:var(--green);}
+.boss-opt.wrong{background:rgba(255,107,107,.25);border-color:var(--red);}
+
+/* REFLEKSI */
+.letter-box{max-width:500px;width:100%;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.04));border:2px solid rgba(255,255,255,.15);border-radius:24px;padding:28px;}
+.letter-header{font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--yellow);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.pledge-item{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;margin-bottom:10px;cursor:pointer;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);transition:all .2s;font-size:.95rem;font-weight:700;}
+.pledge-item:hover{background:rgba(255,255,255,.12);}
+.pledge-item.checked{background:rgba(107,203,119,.15);border-color:var(--green);}
+.pledge-check{width:24px;height:24px;border-radius:8px;border:2.5px solid rgba(255,255,255,.3);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;}
+.pledge-item.checked .pledge-check{background:var(--green);border-color:var(--green);}
+.pledge-name-input{width:100%;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.2);border-radius:12px;padding:10px 14px;color:white;font-family:'Nunito',sans-serif;font-size:.95rem;margin-top:14px;}
+.pledge-name-input:focus{outline:none;border-color:var(--yellow);}
+.pledge-name-input::placeholder{color:rgba(255,255,255,.35);}
+.final-card{display:none;text-align:center;padding:24px;animation:pop .5s ease;}
+.trophy-big{font-size:6rem;animation:bounce 1.5s ease infinite;display:block;margin-bottom:12px;}
+.congrats-text{font-family:'Fredoka One',cursive;font-size:2rem;background:linear-gradient(90deg,var(--yellow),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+
+/* responsive */
+@media(max-width:600px){
+  .notebook-body{grid-template-columns:1fr;}
+  .drag-arena{flex-direction:column;}
+  .boss-area{flex-direction:column;}
+  .monster-scene{flex-direction:column;}
+  .bubble-area{width:280px;height:280px;}
+}
+</style>
+</head>
+<body>
+
+<div class="cloud"></div>
+<div class="cloud"></div>
+<div class="cloud"></div>
+
+<!-- ========== SCENE 0: HERO ========== -->
+<div class="scene active" id="s0">
+  <span class="hero-emojis">🌈</span>
+  <h1 class="title-rainbow">Misi Super Sihat!</h1>
+  <p style="font-family:'Fredoka One',cursive;font-size:1.3rem;opacity:.8;margin:8px 0 4px;">Obesiti? Mari Jadi Hero Kesihatan!</p>
+  <p style="font-size:.9rem;opacity:.6;margin-bottom:28px;text-align:center;max-width:400px;">Sebuah petualangan interaktif untuk murid sekolah rendah 🏫</p>
+  <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:20px;">
+    <div class="card-glow" style="text-align:center;padding:16px 20px;min-width:110px;">
+      <div style="font-size:2rem;">🎮</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">10 Misi</div>
+    </div>
+    <div class="card-glow" style="text-align:center;padding:16px 20px;min-width:110px;">
+      <div style="font-size:2rem;">⭐</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Kumpul Bintang</div>
+    </div>
+    <div class="card-glow" style="text-align:center;padding:16px 20px;min-width:110px;">
+      <div style="font-size:2rem;">🏆</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Jadi Hero!</div>
+    </div>
+  </div>
+  <button class="big-btn btn-pink" onclick="goTo(1)">✨ Mula Bermain ✨</button>
+  <div class="star-row">
+    <span class="star">⭐</span><span class="star">🌟</span><span class="star">⭐</span><span class="star">🌟</span><span class="star">⭐</span>
+  </div>
+</div>
+
+<!-- ========== SCENE 1: AVATAR ========== -->
+<div class="scene" id="s1">
+  <p style="font-size:2.5rem;margin-bottom:4px;">🦸</p>
+  <h2 class="page-title">Pilih Hero Anda!</h2>
+  <p class="subtitle">Siapa yang akan selamatkan Bandar Sihat?</p>
+  <div class="avatar-grid">
+    <div class="avatar-card" onclick="selectAvatar(this,'Adam','👦','Kuat & Berani')">
+      <span class="av-emoji">👦</span>
+      <div class="av-name">Adam</div>
+      <div class="av-trait">💪 Kuat & Berani</div>
+    </div>
+    <div class="avatar-card" onclick="selectAvatar(this,'Aina','👧','Bijak & Ceria')">
+      <span class="av-emoji">👧</span>
+      <div class="av-name">Aina</div>
+      <div class="av-trait">🌟 Bijak & Ceria</div>
+    </div>
+    <div class="avatar-card" onclick="selectAvatar(this,'Kiki','🐱','Pantas & Bijak')">
+      <span class="av-emoji">🐱</span>
+      <div class="av-name">Kiki</div>
+      <div class="av-trait">⚡ Pantas & Bijak</div>
+    </div>
+  </div>
+  <div id="avatarMsg" style="display:none;font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--yellow);margin-bottom:16px;animation:pop .4s ease;text-align:center;"></div>
+  <button class="big-btn btn-blue" id="avatarNext" style="display:none;" onclick="goTo(2)">Mula Misi! 🚀</button>
+</div>
+
+<!-- ========== SCENE 2: APA ITU OBESITI ========== -->
+<div class="scene" id="s2">
+  <p style="font-size:2.5rem;margin-bottom:4px;">📖</p>
+  <h2 class="page-title">Apa Itu Obesiti?</h2>
+  <div style="display:flex;flex-direction:column;gap:14px;max-width:560px;width:100%;margin:8px 0 20px;">
+    <div class="card-glow" style="display:flex;gap:14px;align-items:flex-start;">
+      <span style="font-size:2.5rem;flex-shrink:0;">⚖️</span>
+      <div>
+        <div style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--yellow);margin-bottom:4px;">Definisi</div>
+        <div style="font-size:.9rem;line-height:1.6;opacity:.9;">Obesiti bermakna berat badan <strong style="color:var(--pink)">terlalu berlebihan</strong>. Ia diukur melalui <strong style="color:var(--blue)">BMI (Indeks Jisim Badan)</strong>. Jika BMI melebihi 30 = obes! <span style="opacity:.6;font-size:.8rem;">(Rameli & Ashaari, 2023)</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <div class="card-glow" style="text-align:center;background:linear-gradient(135deg,rgba(255,107,157,.15),rgba(255,107,157,.05));">
+        <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--pink);">19.7%</div>
+        <div style="font-size:.75rem;opacity:.7;margin-top:4px;">Obesiti Malaysia 2019</div>
+      </div>
+      <div class="card-glow" style="text-align:center;background:linear-gradient(135deg,rgba(79,195,247,.15),rgba(79,195,247,.05));">
+        <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--blue);">4.4%</div>
+        <div style="font-size:.75rem;opacity:.7;margin-top:4px;">Tahun 1996</div>
+      </div>
+      <div class="card-glow" style="text-align:center;background:linear-gradient(135deg,rgba(192,132,252,.15),rgba(192,132,252,.05));">
+        <div style="font-family:'Fredoka One',cursive;font-size:2rem;color:var(--purple);">1/3</div>
+        <div style="font-size:.75rem;opacity:.7;margin-top:4px;">Remaja Malaysia</div>
+      </div>
+    </div>
+    <div class="card-glow" style="display:flex;gap:14px;align-items:flex-start;background:linear-gradient(135deg,rgba(107,203,119,.1),rgba(107,203,119,.03));">
+      <span style="font-size:2.5rem;flex-shrink:0;">⚠️</span>
+      <div style="font-size:.88rem;line-height:1.6;opacity:.9;">Ini bukan isu rupa paras semata-mata — ia <strong style="color:var(--orange)">ancaman serius</strong> kepada kesihatan, emosi, dan pelajaran kita! <span style="opacity:.6;font-size:.78rem;">(Nasir et al., 2021)</span></div>
+    </div>
+  </div>
+  <button class="big-btn btn-green" onclick="addStar();goTo(3)">Faham! Teruskan ⭐</button>
+</div>
+
+<!-- ========== SCENE 3: ESCAPE ROOM ========== -->
+<div class="scene" id="s3">
+  <p style="font-size:2rem;margin-bottom:4px;">🏠</p>
+  <h2 class="page-title">Siapa Curi Tenaga Saya?</h2>
+  <p class="subtitle">Klik setiap benda untuk cari petunjuk! <span id="clueCount">0/4</span> ditemui</p>
+  <div class="room-grid">
+    <div class="room-item" onclick="showClue(0)" id="ri0" style="background:linear-gradient(135deg,rgba(255,107,107,.2),rgba(255,107,107,.05));">
+      🍔<div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Makanan Segera</div>
+    </div>
+    <div class="room-item" onclick="showClue(1)" id="ri1" style="background:linear-gradient(135deg,rgba(79,195,247,.2),rgba(79,195,247,.05));">
+      📱<div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Gajet</div>
+    </div>
+    <div class="room-item" onclick="showClue(2)" id="ri2" style="background:linear-gradient(135deg,rgba(107,203,119,.2),rgba(107,203,119,.05));">
+      🛋️<div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Sofa TV</div>
+    </div>
+    <div class="room-item" onclick="showClue(3)" id="ri3" style="background:linear-gradient(135deg,rgba(255,211,61,.2),rgba(255,211,61,.05));">
+      🥤<div style="font-family:'Fredoka One',cursive;font-size:.85rem;margin-top:6px;">Minuman Manis</div>
+    </div>
+  </div>
+  <div id="escapeWin" style="display:none;text-align:center;animation:pop .5s ease;">
+    <p style="font-size:2rem;margin-bottom:8px;">🎉</p>
+    <p style="font-family:'Fredoka One',cursive;font-size:1.2rem;color:var(--green);">Tahniah! Semua punca ditemui!</p>
+    <button class="big-btn btn-yellow" style="margin-top:12px;" onclick="addStar();goTo(4)">Misi Seterusnya ⭐</button>
+  </div>
+  <div id="cluePopup" class="clue-popup" style="display:none;">
+    <div class="clue-box">
+      <div class="clue-num" id="clueNum"></div>
+      <div style="font-size:3rem;margin:8px 0;" id="clueIcon"></div>
+      <div class="clue-text" id="clueText"></div>
+      <div class="source-tag" id="clueSource"></div>
+      <button class="big-btn btn-green" style="margin-top:16px;font-size:1rem;padding:12px 30px;" onclick="closeClue()">Simpan Petunjuk! ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCENE 4: DRAG DROP ========== -->
+<div class="scene" id="s4">
+  <p style="font-size:2rem;margin-bottom:4px;">🎯</p>
+  <h2 class="page-title">Faktor atau Bukan?</h2>
+  <p class="subtitle">Seret kad ke tempat yang betul!</p>
+  <div class="score-bar" id="ddScore"></div>
+  <div class="drag-arena">
+    <div class="drag-pool" id="dragPool">
+      <h3>📦 Kad-Kad</h3>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;flex:2;">
+      <div class="drop-zone" id="dz-faktor" ondragover="dzOver(event)" ondrop="dzDrop(event,'faktor')" ondragleave="dzLeave(event)">
+        <h3 style="color:var(--red);">⚠️ FAKTOR OBESITI</h3>
+      </div>
+      <div class="drop-zone" id="dz-bukan" ondragover="dzOver(event)" ondrop="dzDrop(event,'bukan')" ondragleave="dzLeave(event)">
+        <h3 style="color:var(--green);">✅ BUKAN FAKTOR</h3>
+      </div>
+    </div>
+  </div>
+  <div id="ddResult" style="display:none;text-align:center;margin-top:12px;font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--green);animation:pop .3s ease;"></div>
+</div>
+
+<!-- ========== SCENE 5: MONSTER ========== -->
+<div class="scene" id="s5">
+  <p style="font-size:2rem;margin-bottom:4px;">👾</p>
+  <h2 class="page-title">Monster Obesiti!</h2>
+  <p class="subtitle">Klik topi untuk ketahui kesannya</p>
+  <div class="monster-scene">
+    <div class="monster-box">
+      <div class="monster-emoji" onclick="monsterClick()" id="monsterEmoji">👾</div>
+      <div class="monster-hp" id="monsterHP"></div>
+      <p style="font-family:'Fredoka One',cursive;font-size:.85rem;opacity:.7;margin-top:6px;">Klik monster!</p>
+    </div>
+    <div class="effect-panel">
+      <div class="effect-tabs">
+        <div class="effect-tab active" onclick="showEffects('fizikal',this)">💪 Fizikal</div>
+        <div class="effect-tab" onclick="showEffects('emosi',this)">💜 Emosi</div>
+        <div class="effect-tab" onclick="showEffects('akademik',this)">📚 Akademik</div>
+      </div>
+      <div class="effect-cards" id="effectCards"></div>
+      <p style="font-size:.75rem;opacity:.5;margin-top:8px;">(Nasir et al., 2021; Rameli & Ashaari, 2023)</p>
+    </div>
+  </div>
+  <button class="big-btn btn-purple" style="margin-top:16px;" onclick="addStar();goTo(6)">Seterusnya ⭐</button>
+</div>
+
+<!-- ========== SCENE 6: BUBBLE MAP ========== -->
+<div class="scene" id="s6">
+  <p style="font-size:2rem;margin-bottom:4px;">🫧</p>
+  <h2 class="page-title">Peta Buih Interaktif</h2>
+  <p class="subtitle">Klik setiap buih untuk ketahui lebih lanjut!</p>
+  <div class="bubble-area" id="bubbleArea">
+    <div class="center-bubble">🧒<br>OBESITI</div>
+  </div>
+  <div class="bubble-info" id="bubbleInfo">👆 Klik mana-mana buih di sekeliling untuk lihat maklumat!</div>
+  <button class="big-btn btn-teal" style="margin-top:16px;background:linear-gradient(135deg,var(--teal),#00838f);" onclick="addStar();goTo(7)">Teruskan! ⭐</button>
+</div>
+
+<!-- ========== SCENE 7: SIX HATS ========== -->
+<div class="scene" id="s7">
+  <p style="font-size:2rem;margin-bottom:4px;">🎩</p>
+  <h2 class="page-title">Permainan Topi Pemikiran</h2>
+  <p class="subtitle">Klik topi untuk terokai pelbagai cara berfikir!</p>
+  <div class="hats-grid" id="hatsGrid"></div>
+  <div class="hat-content" id="hatContent"></div>
+  <div class="thinking-trophy" id="thinkTrophy">🏆<br><span style="font-family:'Fredoka One',cursive;font-size:1rem;color:var(--yellow);">Pemikir Hebat!</span></div>
+  <button class="big-btn btn-pink" style="margin-top:20px;" onclick="addStar();goTo(8)">Misi Seterusnya ⭐</button>
+</div>
+
+<!-- ========== SCENE 8: PJ HERO ========== -->
+<div class="scene" id="s8">
+  <p style="font-size:2rem;margin-bottom:4px;">🏃</p>
+  <h2 class="page-title">PJ Hero Challenge!</h2>
+  <p class="subtitle">Klik aktiviti untuk kumpul mata tenaga!</p>
+  <div class="pj-arena">
+    <div class="hero-runner" id="heroRunner" onclick="heroJump()">🧒</div>
+    <div style="font-family:'Fredoka One',cursive;font-size:1.3rem;margin:8px 0;">⚡ Tenaga: <span id="energyPts">0</span>/100</div>
+    <div class="energy-bar"><div class="energy-fill" id="energyFill" style="width:0%"></div></div>
+    <div class="activity-btns">
+      <button class="activity-btn" style="background:linear-gradient(135deg,var(--green),#2d9e3e);color:white;" onclick="doActivity('🏃 Berlari',20)">🏃 Berlari<br>+20 mata</button>
+      <button class="activity-btn" style="background:linear-gradient(135deg,var(--blue),#0096c7);color:white;" onclick="doActivity('🏊 Berenang',25)">🏊 Berenang<br>+25 mata</button>
+      <button class="activity-btn" style="background:linear-gradient(135deg,var(--orange),#e67e22);color:white;" onclick="doActivity('⚽ Bola',15)">⚽ Bola<br>+15 mata</button>
+      <button class="activity-btn" style="background:linear-gradient(135deg,var(--purple),#7c3aed);color:white;" onclick="doActivity('🤸 Senam',18)">🤸 Senam<br>+18 mata</button>
+      <button class="activity-btn" style="background:linear-gradient(135deg,var(--pink),#f72585);color:white;" onclick="doActivity('🚴 Berbasikal',22)">🚴 Basikal<br>+22 mata</button>
+    </div>
+    <div id="actLog" style="font-size:.88rem;opacity:.7;min-height:24px;text-align:center;margin:8px 0;"></div>
+    <div id="pjComplete" style="display:none;text-align:center;animation:pop .5s ease;">
+      <p style="font-size:2rem;">🎉</p>
+      <p style="font-family:'Fredoka One',cursive;font-size:1.1rem;color:var(--green);">Anda membakar kalori! WHO sarankan 60 minit sehari!</p>
+      <p style="font-size:.78rem;opacity:.6;margin:4px 0;">(Razman et al., 2024)</p>
+      <button class="big-btn btn-orange" style="margin-top:12px;" onclick="addStar();goTo(9)">Boss Battle! ⭐</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCENE 9: CORNELL NOTEBOOK ========== -->
+<div class="scene" id="s9">
+  <p style="font-size:2rem;margin-bottom:4px;">📔</p>
+  <h2 class="page-title">Buku Nota Siasatan</h2>
+  <p class="subtitle">Isi nota Cornell seperti seorang detektif!</p>
+  <div class="notebook">
+    <div class="notebook-header">
+      <span style="font-size:1.8rem;">📔</span>
+      <div>
+        <h3>Buku Siasatan Kes Obesiti</h3>
+        <p style="font-size:.8rem;opacity:.85;">Isi berdasarkan apa yang kamu pelajari</p>
+      </div>
+    </div>
+    <div class="notebook-body">
+      <div class="notebook-col">
+        <h4>🔍 Faktor / Punca</h4>
+        <textarea class="nb-field" id="nb1" placeholder="Contoh: makan makanan segera..."></textarea>
+        <textarea class="nb-field" id="nb2" placeholder="Contoh: kurang bersenam..."></textarea>
+      </div>
+      <div class="notebook-col">
+        <h4>⚠️ Kesan</h4>
+        <textarea class="nb-field" id="nb3" placeholder="Kesan fizikal: penyakit..."></textarea>
+        <textarea class="nb-field" id="nb4" placeholder="Kesan emosi: sedih..."></textarea>
+      </div>
+      <div class="notebook-col">
+        <h4>✅ Penyelesaian</h4>
+        <textarea class="nb-field" id="nb5" placeholder="Bersenam setiap hari..."></textarea>
+        <textarea class="nb-field" id="nb6" placeholder="Makan dengan sihat..."></textarea>
+      </div>
+    </div>
+    <div style="padding:0 20px 20px;">
+      <button class="nb-check-btn" onclick="checkNotes()">✓ Semak Nota Saya</button>
+      <div class="nb-result" id="nbResult"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== SCENE 10: WHEEL ========== -->
+<div class="scene" id="s10">
+  <p style="font-size:2rem;margin-bottom:4px;">🎡</p>
+  <h2 class="page-title">Roda Kesihatan!</h2>
+  <p class="subtitle">Pusing roda untuk dapatkan cabaran sihat!</p>
+  <div class="wheel-wrap">
+    <div class="wheel-pointer">▼</div>
+    <canvas id="wheel" width="260" height="260"></canvas>
+  </div>
+  <button class="big-btn btn-yellow" style="margin-top:16px;" id="spinBtn" onclick="spinWheel()">🎡 Pusing Roda!</button>
+  <div class="wheel-prize" id="wheelPrize">
+    <span class="prize-icon" id="prizeIcon"></span>
+    <div class="prize-text" id="prizeText"></div>
+    <div class="prize-desc" id="prizeDesc"></div>
+    <div style="font-size:.75rem;opacity:.5;margin-top:6px;">(Razman et al., 2024)</div>
+  </div>
+  <button class="big-btn btn-orange" style="margin-top:16px;display:none;" id="wheelNext" onclick="addStar();goTo(11)">Lawan Boss! ⭐</button>
+</div>
+
+<!-- ========== SCENE 11: BOSS BATTLE ========== -->
+<div class="scene" id="s11">
+  <p style="font-size:2rem;margin-bottom:4px;">⚔️</p>
+  <h2 class="page-title">Boss Battle!</h2>
+  <p class="subtitle">Jawab soalan untuk kalahkan Boss Obesiti!</p>
+  <div class="boss-area">
+    <div class="boss-side">
+      <div class="boss-emoji" id="bossEmoji">👾</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:.9rem;color:var(--red);margin:6px 0;">Boss Obesiti</div>
+      <div class="boss-hp-bar"><div class="boss-hp-fill" id="bossHpFill" style="width:100%"></div></div>
+      <div style="font-size:.8rem;opacity:.6;" id="bossHpText">❤️ 5/5</div>
+      <div class="boss-lives" id="bossLives"></div>
+    </div>
+    <div class="boss-q-area">
+      <div class="boss-q" id="bossQ"></div>
+      <div class="boss-opts" id="bossOpts"></div>
+      <div style="font-size:.75rem;opacity:.5;margin-top:8px;text-align:center;" id="bossSrc"></div>
+    </div>
+  </div>
+  <div id="bossWin" style="display:none;text-align:center;padding:20px;animation:pop .5s ease;">
+    <p style="font-size:4rem;">🏆</p>
+    <p style="font-family:'Fredoka One',cursive;font-size:1.5rem;color:var(--yellow);">Tahniah Hero!</p>
+    <p style="opacity:.8;margin:8px 0;">Anda menyelamatkan Bandar Sihat!</p>
+    <button class="big-btn btn-green" style="margin-top:12px;" onclick="addStar();goTo(12)">Tamat Misi! 🌟</button>
+  </div>
+  <div id="bossLose" style="display:none;text-align:center;padding:20px;animation:shake .5s ease;">
+    <p style="font-size:3rem;">😅</p>
+    <p style="font-family:'Fredoka One',cursive;font-size:1.1rem;">Cuba lagi!</p>
+    <button class="big-btn btn-orange" style="margin-top:12px;" onclick="resetBoss()">🔄 Cuba Sekali Lagi</button>
+  </div>
+</div>
+
+<!-- ========== SCENE 12: REFLEKSI ========== -->
+<div class="scene" id="s12">
+  <p style="font-size:2rem;margin-bottom:4px;">💌</p>
+  <h2 class="page-title">Surat Kepada Diri Sendiri</h2>
+  <p class="subtitle" id="heroNameDisplay"></p>
+  <div class="letter-box" id="letterBox">
+    <div class="letter-header">💌 Mulai hari ini, saya akan...</div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>🥤 Kurangkan minuman manis dan air gas</span>
+    </div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>🏃 Bersenam sekurang-kurangnya 60 minit sehari</span>
+    </div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>🥗 Makan lebih banyak sayur dan buah-buahan</span>
+    </div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>😴 Tidur cukup (8-9 jam sehari)</span>
+    </div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>📵 Kurangkan masa skrin di luar waktu belajar</span>
+    </div>
+    <div class="pledge-item" onclick="togglePledge(this)">
+      <div class="pledge-check"></div>
+      <span>❤️ Sokong rakan tanpa mengejek penampilan mereka</span>
+    </div>
+    <input class="pledge-name-input" id="pledgeName" placeholder="Tulis nama kamu di sini...">
+    <button class="big-btn btn-pink" style="margin-top:16px;width:100%;display:block;" onclick="completePledge()">✨ Sahkan Ikrar Saya!</button>
+  </div>
+  <div class="final-card" id="finalCard">
+    <span class="trophy-big">🏆</span>
+    <div class="congrats-text">Hero Kesihatan!</div>
+    <p id="finalHeroName" style="font-size:1.1rem;opacity:.9;margin-bottom:12px;"></p>
+    <p style="opacity:.75;font-size:.9rem;max-width:380px;text-align:center;line-height:1.7;">Tahniah kerana melengkapkan Misi Super Sihat! Ingat — pilihan sihat setiap hari membawa kepada kehidupan yang lebih bahagia dan berjaya! 🌟</p>
+    <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;">
+      <span style="background:linear-gradient(135deg,var(--pink),#f72585);padding:8px 16px;border-radius:20px;font-family:'Fredoka One',cursive;font-size:.9rem;">🎓 Misi Lengkap</span>
+      <span style="background:linear-gradient(135deg,var(--yellow),#f9a825);color:#333;padding:8px 16px;border-radius:20px;font-family:'Fredoka One',cursive;font-size:.9rem;">⭐ <span id="finalStars">0</span> Bintang</span>
+      <span style="background:linear-gradient(135deg,var(--green),#2d9e3e);padding:8px 16px;border-radius:20px;font-family:'Fredoka One',cursive;font-size:.9rem;">🏆 Hero Kesihatan</span>
+    </div>
+    <p style="font-size:.72rem;opacity:.4;margin-top:8px;">Rameli & Ashaari (2023) • Nasir et al. (2021) • Razman et al. (2024)</p>
+    <button class="big-btn btn-blue" style="margin-top:16px;" onclick="restartGame()">🔄 Main Semula</button>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="nav-bar">
+  <button onclick="goTo(Math.max(0,currentScene-1))">◀ Sebelum</button>
+  <div class="progress-pill" id="progressPill">Misi 1/12 ⭐ 0</div>
+  <button onclick="goTo(Math.min(12,currentScene+1))">Seterusnya ▶</button>
+</nav>
+
+<script>
+let currentScene=0,stars=0,chosenAvatar={name:'',emoji:'👦'},cluesFound=0;
+const sceneNames=['Mula','Pilih Hero','Pengenalan','Escape Room','Drag & Drop','Monster Kesan','Peta Buih','Topi Pemikiran','PJ Hero','Nota Cornell','Roda Sihat','Boss Battle','Tamat Misi'];
+
+function goTo(n){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  currentScene=n;
+  document.getElementById('progressPill').textContent=`Misi ${n+1}/13 ⭐ ${stars}`;
+  window.scrollTo(0,0);
+  if(n===6)initBubbles();
+  if(n===7)initHats();
+  if(n===10)initWheel();
+  if(n===11)initBoss();
+  if(n===12){document.getElementById('heroNameDisplay').textContent=`Selamat datang, Hero ${chosenAvatar.name} ${chosenAvatar.emoji}!`;document.getElementById('finalStars').textContent=stars;}
+}
+
+function addStar(){
+  stars++;
+  spawnStar();
+  document.getElementById('progressPill').textContent=`Misi ${currentScene+1}/13 ⭐ ${stars}`;
+}
+
+function spawnStar(){
+  const s=document.createElement('div');
+  s.className='star-burst';
+  s.textContent='⭐';
+  s.style.left=Math.random()*80+10+'%';
+  s.style.top=Math.random()*60+20+'%';
+  s.style.animation='starFloat 1.2s ease forwards';
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),1300);
+}
+
+// AVATAR
+function selectAvatar(el,name,emoji,trait){
+  document.querySelectorAll('.avatar-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  chosenAvatar={name,emoji,trait};
+  const m=document.getElementById('avatarMsg');
+  m.style.display='block';
+  m.textContent=`Tahniah! Kamu ialah ${name} ${emoji} — Hero Kesihatan! `;
+  document.getElementById('avatarNext').style.display='block';
+}
+
+// ESCAPE ROOM
+const clues=[
+  {num:'Petunjuk #1 🍔',icon:'🍔',text:'Makanan segera mengandungi banyak lemak dan kalori berlebihan. Ia menyebabkan berat badan meningkat dengan cepat!',src:'(Rameli & Ashaari, 2023)'},
+  {num:'Petunjuk #2 📱',icon:'📱',text:'Terlalu banyak masa menggunakan gajet mengurangkan masa untuk aktiviti fizikal — ini salah satu punca utama gaya hidup sedentari!',src:'(Nasir et al., 2021)'},
+  {num:'Petunjuk #3 🛋️',icon:'🛋️',text:'Duduk menonton TV berjam-jam tanpa bergerak adalah tabiat sedentari yang berbahaya. Kanak-kanak memerlukan 60 minit bergerak aktif setiap hari!',src:'(Razman et al., 2024)'},
+  {num:'Petunjuk #4 🥤',icon:'🥤',text:'Minuman manis seperti air gas mengandungi gula yang sangat tinggi. Gula berlebihan akan bertukar jadi lemak dalam badan!',src:'(Nasir et al., 2021)'},
+];
+let clueOpen=-1;
+function showClue(i){
+  const c=clues[i];
+  document.getElementById('clueNum').textContent=c.num;
+  document.getElementById('clueIcon').textContent=c.icon;
+  document.getElementById('clueText').textContent=c.text;
+  document.getElementById('clueSource').textContent=c.src;
+  document.getElementById('cluePopup').style.display='flex';
+  clueOpen=i;
+}
+function closeClue(){
+  document.getElementById('cluePopup').style.display='none';
+  const ri=document.getElementById('ri'+clueOpen);
+  if(!ri.classList.contains('found')){
+    ri.classList.add('found');
+    ri.innerHTML+='<div class="badge">✓</div>';
+    cluesFound++;
+    document.getElementById('clueCount').textContent=cluesFound+'/4';
+    addStar();
+    if(cluesFound===4){
+      document.getElementById('escapeWin').style.display='block';
+    }
+  }
+}
+
+// DRAG DROP
+const ddItems=[
+  {emoji:'🍟',label:'Makanan Segera',correct:'faktor'},
+  {emoji:'🏃',label:'Bersenam',correct:'bukan'},
+  {emoji:'🥤',label:'Air Gas',correct:'faktor'},
+  {emoji:'⚽',label:'Main Bola',correct:'bukan'},
+  {emoji:'📱',label:'Masa Skrin Lama',correct:'faktor'},
+  {emoji:'🥗',label:'Makan Sayur',correct:'bukan'},
+];
+let ddDone=0,ddCorrect=0;
+function initDragDrop(){
+  const pool=document.getElementById('dragPool');
+  const sc=document.getElementById('ddScore');
+  pool.innerHTML='<h3>📦 Kad-Kad</h3>';
+  sc.innerHTML='';
+  ddDone=0;ddCorrect=0;
+  document.getElementById('dz-faktor').querySelectorAll('.drag-item').forEach(e=>e.remove());
+  document.getElementById('dz-bukan').querySelectorAll('.drag-item').forEach(e=>e.remove());
+  document.getElementById('ddResult').style.display='none';
+  ddItems.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='drag-item';
+    d.draggable=true;
+    d.dataset.idx=i;
+    d.innerHTML=`${item.emoji} ${item.label}`;
+    d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text',i);d.classList.add('dragging');});
+    d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+    pool.appendChild(d);
+    const pip=document.createElement('div');
+    pip.className='score-pip';pip.id='pip'+i;
+    sc.appendChild(pip);
+  });
+}
+function dzOver(e){e.preventDefault();e.currentTarget.classList.add('over');}
+function dzLeave(e){e.currentTarget.classList.remove('over');}
+function dzDrop(e,zone){
+  e.preventDefault();e.currentTarget.classList.remove('over');
+  const idx=parseInt(e.dataTransfer.getData('text'));
+  const item=ddItems[idx];
+  const el=document.querySelector(`[data-idx="${idx}"]`);
+  if(!el)return;
+  const isCorrect=item.correct===zone;
+  el.style.background=isCorrect?'rgba(107,203,119,.25)':'rgba(255,107,107,.25)';
+  el.style.borderColor=isCorrect?'var(--green)':'var(--red)';
+  el.draggable=false;
+  e.currentTarget.appendChild(el);
+  document.getElementById('pip'+idx).classList.add(isCorrect?'correct':'wrong');
+  if(isCorrect)ddCorrect++;
+  ddDone++;
+  if(ddDone===ddItems.length){
+    const r=document.getElementById('ddResult');
+    r.style.display='block';
+    r.style.color=ddCorrect>=5?'var(--green)':'var(--yellow)';
+    r.textContent=`🎯 Markah: ${ddCorrect}/${ddItems.length}! ${ddCorrect===6?'Sempurna! 🌟':'Cuba lagi!'}`;
+    if(ddCorrect>=4)setTimeout(()=>{addStar();setTimeout(()=>goTo(5),1200);},600);
+  }
+}
+
+// MONSTER EFFECTS
+const effects={
+  fizikal:[
+    {icon:'❤️',title:'Penyakit Jantung',desc:'Risiko serangan jantung lebih awal dalam usia muda',color:'var(--red)'},
+    {icon:'🩸',title:'Diabetes Jenis 2',desc:'Paras gula dalam darah tidak terkawal',color:'var(--orange)'},
+    {icon:'🦴',title:'Sendi & Tulang Sakit',desc:'Berat badan menekan lutut, pinggang & belakang',color:'var(--yellow)'},
+  ],
+  emosi:[
+    {icon:'😔',title:'Rendah Diri',desc:'Murid berasa tidak yakin dan malu dengan diri sendiri',color:'var(--purple)'},
+    {icon:'😰',title:'Kebimbangan (Anxiety)',desc:'Rasa risau berterusan tentang rupa paras',color:'var(--pink)'},
+    {icon:'👊',title:'Buli & Peminggiran',desc:'Sering menjadi sasaran buli oleh rakan sebaya',color:'var(--red)'},
+  ],
+  akademik:[
+    {icon:'🎯',title:'Sukar Fokus',desc:'Fungsi otak terganggu — susah beri perhatian di kelas',color:'var(--blue)'},
+    {icon:'📖',title:'Lambat Belajar',desc:'Keupayaan menyerap maklumat baharu menurun',color:'var(--teal)'},
+    {icon:'📉',title:'Prestasi Menurun',desc:'Pencapaian akademik merosot secara keseluruhan',color:'var(--green)'},
+  ]
+};
+let monsterHP=5;
+function showEffects(type,tab){
+  document.querySelectorAll('.effect-tab').forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  const cards=document.getElementById('effectCards');
+  cards.innerHTML='';
+  effects[type].forEach(e=>{
+    const d=document.createElement('div');
+    d.className='effect-card';
+    d.style.borderColor=e.color;
+    d.innerHTML=`<div class="ec-icon">${e.icon}</div><div><div class="ec-title">${e.title}</div><div class="ec-desc">${e.desc}</div></div>`;
+    cards.appendChild(d);
+  });
+}
+function monsterClick(){
+  if(monsterHP<=0)return;
+  monsterHP--;
+  const hpEl=document.getElementById('monsterHP');
+  hpEl.innerHTML='';
+  for(let i=0;i<5;i++){const h=document.createElement('span');h.className='hp-heart'+(i>=monsterHP?' lost':'');h.textContent='❤️';hpEl.appendChild(h);}
+  const me=document.getElementById('monsterEmoji');
+  if(monsterHP===0){me.textContent='💀';me.style.animation='none';}
+  else{me.style.animation='shake .3s ease';setTimeout(()=>me.style.animation='',400);}
+  spawnStar();
+}
+function initMonster(){
+  monsterHP=5;
+  const hpEl=document.getElementById('monsterHP');
+  hpEl.innerHTML='';
+  for(let i=0;i<5;i++){const h=document.createElement('span');h.className='hp-heart';h.textContent='❤️';hpEl.appendChild(h);}
+  document.getElementById('monsterEmoji').textContent='👾';
+  showEffects('fizikal',document.querySelector('.effect-tab'));
+}
+
+// BUBBLE MAP
+const bubbles=[
+  {emoji:'🍟',label:'Makanan Segera',color:'#FF6B6B',info:'Makanan segera tinggi lemak dan kalori boleh menyumbang kepada ketidakseimbangan tenaga yang membawa kepada obesiti. (Rameli & Ashaari, 2023)'},
+  {emoji:'📱',label:'Gajet',color:'#4FC3F7',info:'Penggunaan gajet berlebihan mengurangkan masa untuk aktiviti fizikal, menyebabkan gaya hidup sedentari. (Nasir et al., 2021)'},
+  {emoji:'😔',label:'Emosi',color:'#C084FC',info:'Obesiti boleh menyebabkan rendah diri, kebimbangan, dan kemurungan akibat stigma sosial. (Nasir et al., 2021)'},
+  {emoji:'🧠',label:'Otak',color:'#FFD93D',info:'Fungsi kognitif terjejas — murid obes susah fokus dan lambat menyerap maklumat akademik. (Nasir et al., 2021)'},
+  {emoji:'🏃',label:'PJ',color:'#6BCB77',info:'Pendidikan Jasmani berstruktur terbukti berkesan menurunkan BMI dan meningkatkan kesihatan murid. (Razman et al., 2024)'},
+  {emoji:'👨‍👩‍👧',label:'Keluarga',color:'#FF9F43',info:'Sokongan keluarga dalam gaya hidup aktif dan pemakanan sihat sangat penting untuk mencegah obesiti.'},
+];
+function initBubbles(){
+  const area=document.getElementById('bubbleArea');
+  const existing=area.querySelectorAll('.orbit-bubble');
+  existing.forEach(e=>e.remove());
+  const cx=170,cy=170,r=130;
+  bubbles.forEach((b,i)=>{
+    const angle=(i/bubbles.length)*Math.PI*2-Math.PI/2;
+    const x=cx+r*Math.cos(angle)-35;
+    const y=cy+r*Math.sin(angle)-35;
+    const div=document.createElement('div');
+    div.className='orbit-bubble';
+    div.style.cssText=`left:${x}px;top:${y}px;width:70px;height:70px;background:${b.color}33;border:2.5px solid ${b.color};font-size:1.8rem;`;
+    div.innerHTML=`<div style="text-align:center"><div>${b.emoji}</div><div style="font-size:.55rem;font-family:'Fredoka One',cursive;margin-top:2px;">${b.label}</div></div>`;
+    div.onclick=()=>{
+      document.querySelectorAll('.orbit-bubble').forEach(x=>x.classList.remove('active-bub'));
+      div.classList.add('active-bub');
+      document.getElementById('bubbleInfo').innerHTML=`<strong style="color:${b.color}">${b.emoji} ${b.label}</strong><br>${b.info}`;
+      spawnStar();
+    };
+    area.appendChild(div);
+  });
+}
+
+// SIX HATS
+const hats=[
+  {icon:'⚪',label:'Topi Putih',color:'#e0e0e0',colorDark:'#333',idea:'FAKTA',content:'Obesiti berlaku apabila pengambilan kalori melebihi pembakaran tenaga. Kadar obesiti Malaysia meningkat dari 4.4% (1996) kepada 19.7% (2019). (Rameli & Ashaari, 2023)'},
+  {icon:'🔴',label:'Topi Merah',color:'#FF6B6B',colorDark:'white',idea:'PERASAAN',content:'Murid yang obes mungkin berasa sedih, malu, dan takut diejek oleh rakan. Kita perlu empati dan tidak mengejek sesiapa!'},
+  {icon:'⚫',label:'Topi Hitam',color:'#555',colorDark:'white',idea:'BAHAYA',content:'Jika tidak dirawat, obesiti boleh menyebabkan penyakit jantung, diabetes, dan kemurungan yang memberi kesan jangka panjang pada kehidupan murid.'},
+  {icon:'🟡',label:'Topi Kuning',color:'#FFD93D',colorDark:'#333',idea:'POSITIF',content:'Berita baiknya — obesiti BOLEH dicegah! Dengan bersenam, makan sihat, dan sokongan keluarga, setiap murid boleh mengekalkan berat badan sihat.'},
+  {icon:'🟢',label:'Topi Hijau',color:'#6BCB77',colorDark:'white',idea:'KREATIVITI',content:'Idea Kreatif: Buat cabaran 10,000 langkah sehari dengan kawan! Cipta permainan sukan baharu di sekolah atau buat taman sayur kecil di rumah.'},
+  {icon:'🔵',label:'Topi Biru',color:'#4FC3F7',colorDark:'white',idea:'KAWALAN',content:'Langkah terbaik: (1) Bersenam 60 min/hari (2) Makan sayur & buah (3) Kurang air gas (4) Tidur cukup. (Razman et al., 2024)'},
+];
+let hatsVisited=new Set();
+function initHats(){
+  const grid=document.getElementById('hatsGrid');
+  grid.innerHTML='';
+  hats.forEach((h,i)=>{
+    const d=document.createElement('div');
+    d.className='hat-card';
+    d.style.borderColor=h.color+'44';
+    d.innerHTML=`<span class="hat-icon">${h.icon}</span><div class="hat-label" style="color:${h.color}">${h.label}</div><div style="font-size:.8rem;opacity:.7">${h.idea}</div>`;
+    d.onclick=()=>{
+      document.querySelectorAll('.hat-card').forEach(c=>c.classList.remove('active-hat'));
+      d.classList.add('active-hat');
+      d.style.borderColor=h.color;
+      const content=document.getElementById('hatContent');
+      content.className='hat-content show';
+      content.style.borderLeft=`4px solid ${h.color}`;
+      content.innerHTML=`<strong style="color:${h.color}">${h.icon} ${h.label} — ${h.idea}</strong><br><br>${h.content}`;
+      hatsVisited.add(i);
+      spawnStar();
+      if(hatsVisited.size>=4)document.getElementById('thinkTrophy').style.display='block';
+    };
+    grid.appendChild(d);
+  });
+}
+
+// PJ HERO
+let energy=0;
+function heroJump(){
+  const h=document.getElementById('heroRunner');
+  h.classList.add('jump');
+  setTimeout(()=>h.classList.remove('jump'),400);
+}
+function doActivity(name,pts){
+  if(energy>=100)return;
+  energy=Math.min(100,energy+pts);
+  document.getElementById('energyPts').textContent=energy;
+  document.getElementById('energyFill').style.width=energy+'%';
+  document.getElementById('actLog').textContent=`${name} — +${pts} mata tenaga! 💪`;
+  heroJump();spawnStar();
+  if(energy>=100){document.getElementById('pjComplete').style.display='block';}
+}
+
+// CORNELL NOTES
+function checkNotes(){
+  const fields=['nb1','nb2','nb3','nb4','nb5','nb6'];
+  const filled=fields.filter(id=>document.getElementById(id).value.trim().length>3).length;
+  const r=document.getElementById('nbResult');
+  r.style.display='block';
+  if(filled>=5){
+    r.style.background='rgba(107,203,119,.2)';r.style.color='var(--green)';
+    r.textContent='🌟 Hebat! Nota kamu sangat lengkap! Kamu seorang detektif kesihatan yang bijak!';
+    addStar();setTimeout(()=>goTo(10),1500);
+  }else{
+    r.style.background='rgba(255,211,61,.15)';r.style.color='var(--yellow)';
+    r.textContent=`💡 Isi lagi beberapa ruangan (${filled}/6 diisi). Cuba ingat apa yang kamu pelajari!`;
+  }
+}
+
+// WHEEL
+const segments=[
+  {text:'🥗 Makan Sayur',color:'#6BCB77',desc:'Masukkan 1 jenis sayur dalam makanan kamu hari ini! +10 Mata',pts:10},
+  {text:'🏃 Berlari',color:'#4FC3F7',desc:'Lari keliling taman 3 pusingan selepas sekolah! +15 Mata',pts:15},
+  {text:'💧 Minum Air',color:'#26C6DA',desc:'Minum 8 gelas air putih hari ini — tiada air gas! +10 Mata',pts:10},
+  {text:'⚽ Main Bola',color:'#FF9F43',desc:'Ajak 3 kawan main bola sepak 30 minit! +20 Mata',pts:20},
+  {text:'😴 Tidur Awal',color:'#C084FC',desc:'Tidur sebelum pukul 10 malam — otak perlukan rehat! +10 Mata',pts:10},
+  {text:'📵 Kurang Gajet',color:'#FF6B9D',desc:'Letak telefon 1 jam dan buat senaman ringan! +15 Mata',pts:15},
+  {text:'🥦 Makan Broccoli',color:'#22c55e',desc:'Cuba makan broccoli — sangat bagus untuk badan! +12 Mata',pts:12},
+  {text:'🤸 Senam',color:'#FFD93D',desc:'Buat 20 star jump dan 10 tekan tubi! +18 Mata',pts:18},
+];
+let spinning=false,wheelSpins=0;
+function initWheel(){
+  const canvas=document.getElementById('wheel');
+  const ctx=canvas.getContext('2d');
+  drawWheel(ctx,0);
+}
+function drawWheel(ctx,rotation){
+  ctx.clearRect(0,0,260,260);
+  const cx=130,cy=130,radius=120;
+  const arc=Math.PI*2/segments.length;
+  segments.forEach((seg,i)=>{
+    const start=rotation+i*arc-Math.PI/2;
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,radius,start,start+arc);
+    ctx.closePath();
+    ctx.fillStyle=seg.color;ctx.fill();
+    ctx.strokeStyle='rgba(255,255,255,.3)';ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);
+    ctx.textAlign='right';ctx.fillStyle='white';
+    ctx.font='bold 11px Nunito,sans-serif';
+    ctx.fillText(seg.text.replace(/[^\x00-\x7F]/g,'').trim()||seg.text,radius-8,4);
+    ctx.restore();
+    // emoji separately
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(start+arc/2);
+    ctx.font='14px serif';ctx.fillText(seg.text.match(/\p{Emoji}/u)?.[0]||'',radius-95,5);
+    ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,20,0,Math.PI*2);
+  ctx.fillStyle='white';ctx.fill();
+  ctx.strokeStyle='rgba(0,0,0,.2)';ctx.lineWidth=2;ctx.stroke();
+}
+function spinWheel(){
+  if(spinning)return;
+  spinning=true;
+  document.getElementById('spinBtn').disabled=true;
+  document.getElementById('wheelPrize').style.display='none';
+  const canvas=document.getElementById('wheel');
+  const ctx=canvas.getContext('2d');
+  const extra=Math.floor(Math.random()*segments.length);
+  const total=segments.length*4+extra;
+  let cur=0,frame=0;
+  const totalFrames=120;
+  const arc=Math.PI*2/segments.length;
+  function animate(){
+    const progress=frame/totalFrames;
+    const ease=1-Math.pow(1-progress,3);
+    cur=ease*total*arc;
+    drawWheel(ctx,cur);
+    frame++;
+    if(frame<=totalFrames){requestAnimationFrame(animate);}
+    else{
+      spinning=false;
+      const finalRot=cur%(Math.PI*2);
+      const idx=(segments.length-Math.floor((finalRot+Math.PI/2)/(Math.PI*2/segments.length))%segments.length)%segments.length;
+      const seg=segments[idx<0?0:idx];
+      const prize=document.getElementById('wheelPrize');
+      document.getElementById('prizeIcon').textContent=seg.text.match(/\p{Emoji}/gu)?.[0]||'🎯';
+      document.getElementById('prizeText').textContent=seg.text;
+      document.getElementById('prizeDesc').textContent=seg.desc;
+      prize.style.display='block';
+      stars+=seg.pts/10;
+      spawnStar();spawnStar();
+      wheelSpins++;
+      document.getElementById('spinBtn').disabled=false;
+      if(wheelSpins>=2)document.getElementById('wheelNext').style.display='block';
+    }
+  }
+  animate();
+}
+
+// BOSS BATTLE
+const bossQs=[
+  {q:'Apakah nilai BMI yang menunjukkan seseorang dikategorikan sebagai obes?',opts:['BMI > 25','BMI > 30 ✓','BMI > 35','BMI > 40'],correct:1,src:'Rameli & Ashaari (2023)'},
+  {q:'Berapa minit aktiviti fizikal yang disyorkan WHO untuk kanak-kanak setiap hari?',opts:['30 minit','45 minit','60 minit ✓','90 minit'],correct:2,src:'WHO / Razman et al. (2024)'},
+  {q:'Apakah kesan obesiti terhadap otak dan pembelajaran murid?',opts:['Murid lebih bijak','Murid lebih fokus','Fungsi otak terjejas — susah fokus ✓','Tiada kesan langsung'],correct:2,src:'Nasir et al. (2021)'},
+  {q:'Manakah BUKAN faktor risiko yang menyumbang kepada obesiti?',opts:['Makan makanan segera','Masa skrin yang lama','Bersenam setiap hari ✓','Minuman manis'],correct:2,src:'Nasir et al. (2021)'},
+  {q:'Apakah kadar obesiti Malaysia pada tahun 2019?',opts:['4.4%','10.5%','19.7% ✓','25.0%'],correct:2,src:'Rameli & Ashaari (2023)'},
+];
+let bossHP=5,bossQIdx=0,bossAnswered=false;
+function initBoss(){
+  bossHP=5;bossQIdx=0;bossAnswered=false;
+  document.getElementById('bossWin').style.display='none';
+  document.getElementById('bossLose').style.display='none';
+  updateBossHP();renderBossQ();
+}
+function updateBossHP(){
+  document.getElementById('bossHpFill').style.width=(bossHP/5*100)+'%';
+  document.getElementById('bossHpText').textContent='❤️ '+bossHP+'/5';
+  const lives=document.getElementById('bossLives');
+  lives.innerHTML='';
+  for(let i=0;i<5;i++){const h=document.createElement('span');h.className='boss-heart';h.textContent=i<bossHP?'❤️':'🖤';lives.appendChild(h);}
+}
+function renderBossQ(){
+  if(bossQIdx>=bossQs.length){
+    document.getElementById('bossWin').style.display='block';
+    document.getElementById('bossEmoji').textContent='💀';
+    addStar();return;
+  }
+  const q=bossQs[bossQIdx];
+  document.getElementById('bossQ').textContent=q.q;
+  document.getElementById('bossSrc').textContent='Sumber: '+q.src;
+  bossAnswered=false;
+  const opts=document.getElementById('bossOpts');
+  opts.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.className='boss-opt';
+    b.textContent=o.replace(' ✓','');
+    b.onclick=()=>answerBoss(i,q.correct,b);
+    opts.appendChild(b);
+  });
+}
+function answerBoss(i,correct,btn){
+  if(bossAnswered)return;
+  bossAnswered=true;
+  const btns=document.querySelectorAll('.boss-opt');
+  btns.forEach(b=>b.disabled=true);
+  btns[correct].classList.add('correct');
+  if(i===correct){
+    bossHP--;updateBossHP();
+    const be=document.getElementById('bossEmoji');
+    be.classList.add('hit');setTimeout(()=>be.classList.remove('hit'),400);
+    spawnStar();
+    setTimeout(()=>{bossQIdx++;renderBossQ();},1200);
+  }else{
+    btn.classList.add('wrong');
+    if(bossHP<=0){document.getElementById('bossLose').style.display='block';return;}
+    setTimeout(()=>{bossQIdx++;renderBossQ();},1400);
+  }
+}
+function resetBoss(){initBoss();}
+
+// REFLEKSI
+function togglePledge(el){el.classList.toggle('checked');const ch=el.querySelector('.pledge-check');ch.textContent=el.classList.contains('checked')?'✓':'';}
+function completePledge(){
+  const name=document.getElementById('pledgeName').value.trim()||chosenAvatar.name;
+  const checked=document.querySelectorAll('.pledge-item.checked').length;
+  if(checked<3){alert('Pilih sekurang-kurangnya 3 ikrar! 💪');return;}
+  document.getElementById('letterBox').style.display='none';
+  document.getElementById('finalCard').style.display='block';
+  document.getElementById('finalHeroName').textContent=`${chosenAvatar.emoji} ${name} — Telah menyelesaikan Misi Super Sihat!`;
+  document.getElementById('finalStars').textContent=stars;
+  addStar();addStar();addStar();
+}
+function restartGame(){stars=0;cluesFound=0;energy=0;hatsVisited=new Set();wheelSpins=0;document.getElementById('letterBox').style.display='block';document.getElementById('finalCard').style.display='none';goTo(0);}
+
+// INIT on load
+window.addEventListener('load',()=>{
+  initDragDrop();
+  initMonster();
+  // Scene 4 needs drag drop re-init when visited
+});
+
+// Watch for scene changes to re-init
+const origGoTo=goTo;
+</script>
+</body>
+</html>
